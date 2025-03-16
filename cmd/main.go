@@ -1,7 +1,12 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/team-pascal/mnit/internal/service"
+)
 
 func main() {
-	fmt.Println("hello, world")
+	token := service.GetToken()
+	fmt.Println(token)
 }
