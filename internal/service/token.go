@@ -1,16 +1,16 @@
 package service
 
 import (
-	"fmt"
+	"errors"
 	"os"
 )
 
 const TOKEN_ENV = "MNIT_NOTION_TOKEN"
 
-func GetToken() string {
+func GetToken() (string, error) {
 	token := os.Getenv(TOKEN_ENV)
 	if token == "" {
-		fmt.Fprintf(os.Stderr, "mnit: not found mnit notion token")
+		return "", errors.New("not found mnit notion token")
 	}
-	return token
+	return token, nil
 }
