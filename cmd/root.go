@@ -33,7 +33,6 @@ var rootCmd = &cobra.Command{
 	Long: `A CLI tool to upload Markdown files to Notion and fetch Notion pages as Markdown.
 Push local Markdown documents to Notion or pull Notion content for local editing.
 `,
-	// Run: func(cmd *cobra.Command, args []string) {},
 }
 
 func Execute() {
