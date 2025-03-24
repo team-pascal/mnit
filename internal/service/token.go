@@ -3,12 +3,29 @@ package service
 import (
 	"errors"
 	"os"
+	"path/filepath"
+
+	"github.com/BurntSushi/toml"
+	"github.com/team-pascal/mnit/internal/model"
 )
 
 const TOKEN_ENV = "MNIT_NOTION_TOKEN"
 
 func GetToken() (string, error) {
-	token := os.Getenv(TOKEN_ENV)
+	home, err := os.UserHomeDir()
+	if err != nil {
+		return "", errors.New(err.Error())
+	}
+	configDir := filepath.Join(home, ".mnit")
+	configFile := filepath.Join(configDir, "config.toml")
+
+	var config model.Config
+
+	if _, err := toml.DecodeFile(configFile, &config); err != nil {
+		return "", errors.New("failed open config file")
+	}
+
+	token := config.Notion.NotionToken
 	if token == "" {
 		return "", errors.New("not found mnit notion token")
 	}
