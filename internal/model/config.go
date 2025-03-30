@@ -1,9 +1,10 @@
 package model
 
 type Config struct {
-	Notion NotionConfig `toml:"notion"`
+	Mnit NotionConfig `toml:"mnit"`
 }
 
 type NotionConfig struct {
-	NotionToken string `toml:"notion_token"`
+	NotionToken string            `toml:"notion_token"`
+	NotionDBId  map[string]string `toml:"notion_db_id"`
 }

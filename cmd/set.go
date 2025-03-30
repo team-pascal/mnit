@@ -34,9 +34,11 @@ var setCmd = &cobra.Command{
 	Long: `Set configuration value by specifyig a key.
 
 Currently supproted keys:
-  - token	: Set the Notion API token. If a token has already stored, the token is updated.`,
-	Example: `  mnit set token <your-token>`,
-	Args:    cobra.MinimumNArgs(1),
+  - token	: Set the Notion API token. If a token has already stored, the token is updated.
+	- db	: Set the Notion database ID. If the same key database id is stored, the database id is updated.`,
+	Example: `  mnit set token <your-token>
+  mnit set db <user-defined-key> <database id>`,
+	Args: cobra.MinimumNArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		key := args[0]
 
@@ -51,6 +53,19 @@ Currently supproted keys:
 			if err := service.SetToken(token); err != nil {
 				fmt.Println(err.Error())
 			}
+		case "db":
+			if len(args) < 3 {
+				return fmt.Errorf("missing user defined key or database id.")
+
+			}
+
+			dbKey := args[1]
+			dbID := args[2]
+
+			if err := service.SetDBID(dbKey, dbID); err != nil {
+				fmt.Println(err.Error())
+			}
+
 		default:
 			return fmt.Errorf("invalid key: %s", key)
 		}

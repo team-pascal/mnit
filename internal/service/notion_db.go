@@ -2,26 +2,24 @@ package service
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/BurntSushi/toml"
 )
 
-const TOKEN_ENV = "MNIT_NOTION_TOKEN"
-
-func GetToken() (string, error) {
+func GetDBID(key string) (string, error) {
 	config, err := GetConfig()
 	if err != nil {
 		return "", errors.New(err.Error())
 	}
-
-	token := config.Mnit.NotionToken
-	if token == "" {
-		return "", errors.New("not found mnit notion token.")
+	dbID, ok := config.Mnit.NotionDBId[key]
+	if !ok {
+		return "", fmt.Errorf("db id for key '%s' not found.", key)
 	}
-	return token, nil
+	return dbID, nil
 }
 
-func SetToken(token string) error {
+func SetDBID(key string, id string) error {
 	config, err := GetConfig()
 	if err != nil {
 		return errors.New(err.Error())
@@ -33,11 +31,11 @@ func SetToken(token string) error {
 	}
 	defer file.Close()
 
-	config.Mnit.NotionToken = token
+	config.Mnit.NotionDBId[key] = id
 
 	err = toml.NewEncoder(file).Encode(config)
 	if err != nil {
-		return errors.New("failed to save token.")
+		return errors.New("failed to save database ID.")
 	}
 	return nil
 }
