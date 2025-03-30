@@ -6,5 +6,5 @@ type Config struct {
 
 type NotionConfig struct {
 	NotionToken string            `toml:"notion_token"`
-	NotionDBId  map[string]string `toml:"notio_db_id"`
+	NotionDBId  map[string]string `toml:"notion_db_id"`
 }

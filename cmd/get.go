@@ -34,9 +34,11 @@ var getCmd = &cobra.Command{
 	Long: `Retrieve configuration value by specifyig a key.
 
 Currently supproted keys:
-  - token	: Retrieve the stored Notion API token.`,
-	Example: `  mnit get token`,
-	Args:    cobra.MinimumNArgs(1),
+  - token	: Retrieve the stored Notion API token.
+	- db	: Retrieve the stored Notion database ID.`,
+	Example: `  mnit get token
+  mnit get db <user-defined-key>`,
+	Args: cobra.MinimumNArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		key := args[0]
 
@@ -48,6 +50,17 @@ Currently supproted keys:
 				return nil
 			}
 			fmt.Println(token)
+		case "db":
+			if len(args) < 2 {
+				return fmt.Errorf("missing user defined key.")
+			}
+
+			dbID, err := service.GetDBID(args[1])
+			if err != nil {
+				fmt.Println(err.Error())
+				return nil
+			}
+			fmt.Println(dbID)
 		default:
 			return fmt.Errorf("invalid key: %s", key)
 		}
